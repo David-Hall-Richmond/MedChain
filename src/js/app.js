@@ -21,18 +21,18 @@ App = {
     },
 
     initContract: function() {
-        $.getJSON("Election.json", function(election) {
+        $.getJSON("MedChain.json", function(medChain) {
             // Instantiate a new truffle contract from the artifact
-            App.contracts.Election = TruffleContract(election);
+            App.contracts.MedChain = TruffleContract(medChain);
             // Connect provider to interact with contract
-            App.contracts.Election.setProvider(App.web3Provider);
+            App.contracts.MedChain.setProvider(App.web3Provider);
 
             return App.render();
         });
     },
 
     render: function() {
-        var electionInstance;
+        var medChainInstance;
         var loader = $("#loader");
         var content = $("#content");
 
@@ -48,9 +48,9 @@ App = {
         });
 
         // Load contract data
-        App.contracts.Election.deployed().then(function(instance) {
-            electionInstance = instance;
-            return electionInstance.candidatesCount();
+        App.contracts.MedChain.deployed().then(function(instance) {
+            medChainInstance = instance;
+            return medChainInstance.candidatesCount();
         }).then(function(candidatesCount) {
             var candidatesResults = $("#candidatesResults");
             candidatesResults.empty();
@@ -59,7 +59,7 @@ App = {
             candidatesSelect.empty();
 
             for (var i = 1; i <= candidatesCount; i++) {
-                electionInstance.candidates(i).then(function(candidate) {
+                medChainInstance.candidates(i).then(function(candidate) {
                     var id = candidate[0];
                     var name = candidate[1];
                     var voteCount = candidate[2];
@@ -73,7 +73,7 @@ App = {
                     candidatesSelect.append(candidateOption);
                 });
             }
-            return electionInstance.voters(App.account);
+            return medChainInstance.voters(App.account);
         }).then(function(hasVoted) {
             // Do not allow a user to vote
             if(hasVoted) {
@@ -88,7 +88,7 @@ App = {
 
     castVote: function() {
         var candidateId = $('#candidatesSelect').val();
-        App.contracts.Election.deployed().then(function(instance) {
+        App.contracts.medChain.deployed().then(function(instance) {
             return instance.vote(candidateId, { from: App.account });
         }).then(function(result) {
             // Wait for votes to update
@@ -100,7 +100,7 @@ App = {
     },
 
     listenForEvents: function() {
-        App.contracts.Election.deployed().then(function(instance) {
+        App.contracts.MedChain.deployed().then(function(instance) {
             instance.votedEvent({}, {
                 fromBlock: 0,
                 toBlock: 'latest'
@@ -113,11 +113,11 @@ App = {
     },
 
     initContract: function() {
-        $.getJSON("Election.json", function(election) {
+        $.getJSON("MedChain.json", function(medChain) {
             // Instantiate a new truffle contract from the artifact
-            App.contracts.Election = TruffleContract(election);
+            App.contracts.MedChain = TruffleContract(medChain);
             // Connect provider to interact with contract
-            App.contracts.Election.setProvider(App.web3Provider);
+            App.contracts.MedChain.setProvider(App.web3Provider);
 
             App.listenForEvents();
 
