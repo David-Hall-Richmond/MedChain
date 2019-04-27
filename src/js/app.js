@@ -97,17 +97,68 @@ App = {
     // Need to implement
     getAuthorization: function(){
         // Create hash of private key and nonce
-        GitHost.prototype.hash = function () {
-  return this.committish ? '#' + this.committish : ''
-}
-import helpers.SHA256;
-        String message = "Private Key";
 
-        System.out.println("Message: " + message);
+        // Get patient address
+            // Call checkAuth() contract function
+            console.log(instance.checkAuth(patientHash, "1234567"));
+            // Call checkAuth() contract function
+            console.log(instance.checkAuth(patientAddress, "123456"));
+            // Return
+            return instance.auth(patientAddress, { from: App.account });
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(err) {
+            console.error(err);
+        });
+    },
 
-        String hashValue = SHA256.generateHash(message);
+    addRecord: function(){
+        // Call getAuthorization()
+        // Open connection to file
+        // Append new record to file
+        // Close file
 
-        System.out.println(String.format("Hash: %s", hashValue));
+    },
+
+    createNewAuthorization(){
+        // Get patient information from MetaMask
+        // Create hash
+        // Send info into addAuthorization() in Contract
+    },
+
+   /* listenForEvents: function() {
+        App.contracts.Election.deployed().then(function(instance) {
+            instance.votedEvent({}, {
+                fromBlock: 0,
+                toBlock: 'latest'
+            }).watch(function(error, event) {
+                console.log("event triggered", event)
+                // Reload when a new vote is recorded
+                App.render();
+            });
+        });
+    }*/
+};
+
+// No need to modify
+$(function() {
+    $(window).load(function() {
+        App.init();
+    });
+});
+
+
+////////////////////////////////////////////////////////////////
+
+// Section for nonceHash is probaly ok, 
+// everything else may help some though its no good
+// best to get rid of rest from here down.
+
+/* Section for nonceHash in js
+
+        var Web3 = require("web3")
+        String message = "Private Key"
+        web3.eth.accounts.hashMessage(message)
 
         String nonceKey = "12345";
         // E.g. "00000" :
@@ -117,28 +168,31 @@ import helpers.SHA256;
         boolean isNonceFound = false;
         String nonceHash = "";
 
-        long start = System.currentTimeMillis();
+        long start = Date.now();
 
         while (!isNonceFound) {
 
-            nonceHash = SHA256.generateHash(message + nonce);
+            nonceHash = web3.eth.accounts.hashMessage(message + nonce);
             isNonceFound = nonceHash.substring(0, nonceKey.length()).equals(zeroGoal);
             if (!isNonceFound) {
                 nonce++;
             }
         }
 
-        long ms = System.currentTimeMillis() - start;
+        long ms = Date.now() - start;
 
-        //System.out.println(String.format("Nonce: %d", nonce));
-        //System.out.println(String.format("Nonce Hash: %s", nonceHash));
-        //System.out.println(String.format("Nonce Search Time: %s ms", ms));
+        console.log(String.format("Nonce: %d", nonce));
+        console.log(String.format("Nonce Hash: %s", nonceHash));
+        console.log(String.format("Nonce Search Time: %s ms", ms));
+*/
 
+/*
+        GitHost.prototype.hash = function () {
+  return this.committish ? '#' + this.committish : ''
+}
         var patientHash = $('#patientSelect').val();
+
         // Get patient address
-        var patientAddress = $('#patientSelect').val();
-        App.contracts.medChain.deployed().then(function(instance) {
-            console.log("Getting Patient Address: ");
             // Call checkAuth() contract function
             console.log(instance.checkAuth(patientHash, "1234567"));
             // Call checkAuth() contract function
@@ -308,24 +362,4 @@ function send (req, path, options) {
     }
 
     },
-
-   /* listenForEvents: function() {
-        App.contracts.Election.deployed().then(function(instance) {
-            instance.votedEvent({}, {
-                fromBlock: 0,
-                toBlock: 'latest'
-            }).watch(function(error, event) {
-                console.log("event triggered", event)
-                // Reload when a new vote is recorded
-                App.render();
-            });
-        });
-    }*/
-};
-
-// No need to modify
-$(function() {
-    $(window).load(function() {
-        App.init();
-    });
-});
+*/
