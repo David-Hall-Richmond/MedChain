@@ -51,17 +51,13 @@ App = {
         // Load contract data
         App.contracts.MedChain.deployed().then(function(instance) {
             medChainInstance = instance;
-            return medChainInstance.providersCount();
-        }).then(function(providersCount) {
-            var providersResults = $("#providersResults");
-            providersResults.empty();
-
-            var providersSelect = $('#providersSelect');
-            providersSelect.empty();
+            return medChainInstance.patientCount();
+        }).then(function(patientCount) {
             var patientSelect = $('#patientSelect');
             patientSelect.empty();
 
-            for (var i = 1; i <= providersCount; i++) {
+            //this needs to be fixed, below is a dummy function just to get things working
+            /*for (var i = 1; i <= patientCount; i++) {
                 medChainInstance.patientAddresses(i).then(function(patientAdd) {
                     medChainInstance.patients[patientAdd].then(function(patient){
                         var name = patient.name;
@@ -70,8 +66,14 @@ App = {
                         patientSelect.append(patientOption);
                     });
                 });
+            }*/
+            for (var i = 1; i <= patientCount; i++) {
+                        var name = "Bob Jones";
+                        var patientAdd = "Dummy Address";
+
+                        var patientOption = "<option value='" + patientAdd + "' >" + name + "</ option>";
+                        patientSelect.append(patientOption);
             }
-            return medChainInstance.patients(App.account);
         }).catch(function(error) {
             console.warn(error);
         });

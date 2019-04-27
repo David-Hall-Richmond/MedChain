@@ -16,7 +16,7 @@ contract MedChain {
 
     //Patient list
     mapping(address => Patient) public patients;
-    uint private patientCount=0;
+    uint public patientCount=0;
 
     constructor () public {
         addPatient(address1,"Alice Adams","file1.json");
@@ -25,8 +25,6 @@ contract MedChain {
 
     function addPatient (address _address,string memory name,string memory recs) private {
         patients[_address] = Patient(_address,name,recs);
-
-        //patientAddresses[patientCount] = _address;
         patientCount++;
     }
 
@@ -34,7 +32,7 @@ contract MedChain {
         patients[patientAddress].authList[providerHash] = true;
     }
 
-    function checkAuth(address patientAddress, string memory providerHash) public returns(bool isAuth) {
-        isAuth=patients[patientAddress].authList[providerHash];
+    function checkAuth(address patientAddress, string memory providerHash) public returns(bool) {
+        return patients[patientAddress].authList[providerHash];
     }
 }
