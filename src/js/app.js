@@ -97,19 +97,10 @@ App = {
     // Need to implement
     getAuthorization: function(){
         // Create hash of private key and nonce
-
         // Get patient address
-            // Call checkAuth() contract function
-            console.log(instance.checkAuth(patientHash, "1234567"));
-            // Call checkAuth() contract function
-            console.log(instance.checkAuth(patientAddress, "123456"));
-            // Return
-            return instance.auth(patientAddress, { from: App.account });
-        }).then(function(result) {
-            console.log(result);
-        }).catch(function(err) {
-            console.error(err);
-        });
+        // Call checkAuth() contract function
+        // Call checkAuth() contract function
+        // Return
     },
 
     addRecord: function(){
@@ -117,7 +108,6 @@ App = {
         // Open connection to file
         // Append new record to file
         // Close file
-
     },
 
     createNewAuthorization(){
