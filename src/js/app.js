@@ -53,7 +53,7 @@ App = {
             var patientSelect = $('#patientSelect');
             patientSelect.empty();
 
-            //this needs to be fixed, below is a dummy function just to get things working
+            // This needs to be fixed, below is a dummy function just to get things working
             /*for (var i = 1; i <= patientCount; i++) {
                 medChainInstance.patientAddresses(i).then(function(patientAdd) {
                     medChainInstance.patients[patientAdd].then(function(patient){
@@ -93,24 +93,187 @@ App = {
             console.error(err);
         });
     },
-    /* to be implemented
+
+    // Need to implement
     getAuthorization: function(){
-        create hash of private key and nonce
-        get patient address
-        call checkAuth() contract function and return
+        // Create hash of private key and nonce
+        GitHost.prototype.hash = function () {
+  return this.committish ? '#' + this.committish : ''
+}
+        var patientHash = $('#patientSelect').val();
+        // Get patient address
+        var patientAddress = $('#patientSelect').val();
+        App.contracts.medChain.deployed().then(function(instance) {
+            console.log("Getting Patient Address: ");
+            // Call checkAuth() contract function
+            console.log(instance.checkAuth(patientHash, "1234567"));
+            // Call checkAuth() contract function
+            console.log(instance.checkAuth(patientAddress, "123456"));
+            // Return
+            return instance.auth(patientAddress, { from: App.account });
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(err) {
+            console.error(err);
+        });
     },
+
     addRecord: function(){
-        call getAuthorization()
-        open connection to file
-        append new record to file
-        close file
+        // Call getAuthorization()
+        getAuthorization()
+
+        // Open connection to file
+
+    var currentFilePath = opts.currentFilePath;
+
+    opts.logger.debug("Reading the file: %s", currentFilePath);
+
+    var read;
+
+    try {
+        read = fs.readFileSync(currentFilePath, "utf8");
+    } catch (e) {
+        opts.errored = true;
+        return opts.logger.info(messages.fileNotFound(path.basename(currentFilePath)));
+    }
+
+    var found = false;
+
+ var fs$open = fs.open
+  fs.open = open
+  function open (path, flags, mode, cb) {
+    if (typeof mode === 'function')
+      cb = mode, mode = null
+
+    return go$open(path, flags, mode, cb)
+
+    function go$open (path, flags, mode, cb) {
+      return fs$open(path, flags, mode, function (err, fd) {
+        if (err && (err.code === 'EMFILE' || err.code === 'ENFILE'))
+          enqueue([go$open, [path, flags, mode, cb]])
+        else {
+          if (typeof cb === 'function')
+            cb.apply(this, arguments)
+          retry()
+        }
+      })
+    }
+  }
+
+        // Server Example
+        ```js
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
+});
+```
+// Express js example
+```js
+const express = require('express');
+const http = require('http');
+const url = require('url');
+const WebSocket = require('ws');
+
+const app = express();
+
+app.use(function (req, res) {
+  res.send({ msg: "hello" });
+});
+
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', function connection(ws, req) {
+  const location = url.parse(req.url, true);
+  // You might use location.query.access_token to authenticate or share sessions
+  // or req.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
+
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
+});
+
+server.listen(8080, function listening() {
+  console.log('Listening on %d', server.address().port);
+});
+```
+        // Append new record to file
+
+        errorEx.append = function (str, def) {
+    return {
+        message: function (v, message) {
+            v = v || def;
+
+            if (v) {
+                message[0] += ' ' + str.replace('%s', v.toString());
+            }
+
+            return message;
+        }
+    };
+};
+utils.append = function(val) {
+  return function(node) {
+    append(this, val, node);
+  };
+};
+function append(compiler, val, node) {
+  if (typeof compiler.append !== 'function') {
+    return compiler.emit(val, node);
+  }
+  return compiler.append(val, node);
+}
+
+        // Close file
+
+        // Returns instance of FSWatcher for chaining.
+FSWatcher.prototype.close = function() {
+  if (this.closed) return this;
+
+  this.closed = true;
+  Object.keys(this._closers).forEach(function(watchPath) {
+    this._closers[watchPath]();
+    delete this._closers[watchPath];
+  }, this);
+  this._watched = Object.create(null);
+
+  this.removeAllListeners();
+  return this;
+};
     },
+
     createNewAuthorization(){
         get patient information from MetaMask
-        create hash
-        send info into addAuthorization() in Contract
+        // Create hash
+GitHost.prototype.hash = function () {
+  return this.committish ? '#' + this.committish : ''
+}
+        // Send info into addAuthorization() in Contract
+function send (req, path, options) {
+  return new SendStream(req, path, options)
+}
+
+  function Contract(contract) {
+    var self = this;
+    var constructor = this.constructor;
+    this.abi = constructor.abi;
+
+    if (typeof contract == "string") {
+      var address = contract;
+      var contract_class = constructor.web3.eth.contract(this.abi);
+      contract = contract_class.at(address);
+    }
+
     },
-    */
 
    /* listenForEvents: function() {
         App.contracts.Election.deployed().then(function(instance) {
@@ -126,8 +289,7 @@ App = {
     }*/
 };
 
-
-//No need to modify
+// No need to modify
 $(function() {
     $(window).load(function() {
         App.init();
