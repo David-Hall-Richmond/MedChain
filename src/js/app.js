@@ -51,16 +51,25 @@ App = {
         // Load contract data
         App.contracts.MedChain.deployed().then(function(instance) {
             medChainInstance = instance;
-            return medChainInstance.candidatesCount();
-        }).then(function(c) {
+            return medChainInstance.providersCount();
+        }).then(function(providersCount) {
+            var providersResults = $("#providersResults");
+            providersResults.empty();
 
+            var providersSelect = $('#providersSelect');
+            providersSelect.empty();
             var patientSelect = $('#patientSelect');
             patientSelect.empty();
 
-            for (var i = 1; i <= candidatesCount; i++) {
-                medChainInstance.patientAddresses(i).then(function(patientAdd) {
-                    medChainInstance.patients[patientAdd].then(function(patient){
-                    var name = patient.name;
+            for (var i = 1; i <= providersCount; i++) {
+                medChainInstance.providers(i).then(function(provider) {
+                    var id = provider[0];
+                    var name = provider[1];
+                    var voteCount = provider[2];
+
+                    // Render provider Result
+                    var providerTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
+                    providersResults.append(providerTemplate);
 
                     // Render candidate ballot option
                     var patientOption = "<option value='" + patientAdd + "' >" + name + "</ option>";
@@ -76,7 +85,7 @@ App = {
 
     castVote: function() {
         var candidateId = $('#candidatesSelect').val();
-        App.contracts.Election.deployed().then(function(instance) {
+        App.contracts.medChain.deployed().then(function(instance) {
             return instance.vote(candidateId, { from: App.account });
         }).then(function(result) {
             // Wait for votes to update
