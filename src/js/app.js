@@ -62,18 +62,12 @@ App = {
             patientSelect.empty();
 
             for (var i = 1; i <= providersCount; i++) {
-                medChainInstance.providers(i).then(function(provider) {
-                    var id = provider[0];
-                    var name = provider[1];
-                    var voteCount = provider[2];
+                medChainInstance.patientAddresses(i).then(function(patientAdd) {
+                    medChainInstance.patients[patientAdd].then(function(patient){
+                        var name = patient.name;
 
-                    // Render provider Result
-                    var providerTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-                    providersResults.append(providerTemplate);
-
-                    // Render candidate ballot option
-                    var patientOption = "<option value='" + patientAdd + "' >" + name + "</ option>";
-                    patientSelect.append(patientOption);
+                        var patientOption = "<option value='" + patientAdd + "' >" + name + "</ option>";
+                        patientSelect.append(patientOption);
                     });
                 });
             }
@@ -84,9 +78,9 @@ App = {
     },
 
     castVote: function() {
-        var candidateId = $('#candidatesSelect').val();
+        var patientAddress = $('#patientSelect').val();
         App.contracts.medChain.deployed().then(function(instance) {
-            return instance.vote(candidateId, { from: App.account });
+            return instance.auth(patientAddress, { from: App.account });
         }).then(function(result) {
             // Wait for votes to update
             $("#content").hide();
