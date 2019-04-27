@@ -1,5 +1,5 @@
-var Election = artifacts.require("./Election.sol");
+var MedChain = artifacts.require("./MedChain.sol");
 
 module.exports = function(deployer) {
-    deployer.deploy(Election);
+    deployer.deploy(MedChain);
 };

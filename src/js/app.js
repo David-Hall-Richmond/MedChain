@@ -2,7 +2,7 @@ App = {
     web3Provider: null,
     contracts: {},
     account: '0x0',
-
+    /** Does not need to be modified*/
     init: function() {
         return App.initWeb3();
     },
@@ -21,9 +21,9 @@ App = {
     },
 
     initContract: function() {
-        $.getJSON("MedChain.json", function(medChain) {
+        $.getJSON("MedChain.json", function(meds) {
             // Instantiate a new truffle contract from the artifact
-            App.contracts.MedChain = TruffleContract(medChain);
+            App.contracts.MedChain = TruffleContract(meds);
             // Connect provider to interact with contract
             App.contracts.MedChain.setProvider(App.web3Provider);
 
@@ -43,44 +43,32 @@ App = {
         web3.eth.getCoinbase(function(err, account) {
             if (err === null) {
                 App.account = account;
-                $("#accountAddress").html("Your Account: " + account);
+                //$("#accountAddress").html("Your Account: " + account);
             }
         });
+        /** Modify after this only**/
 
         // Load contract data
         App.contracts.MedChain.deployed().then(function(instance) {
             medChainInstance = instance;
             return medChainInstance.candidatesCount();
-        }).then(function(candidatesCount) {
-            var candidatesResults = $("#candidatesResults");
-            candidatesResults.empty();
+        }).then(function(c) {
 
-            var candidatesSelect = $('#candidatesSelect');
-            candidatesSelect.empty();
+            var patientSelect = $('#patientSelect');
+            patientSelect.empty();
 
             for (var i = 1; i <= candidatesCount; i++) {
-                medChainInstance.candidates(i).then(function(candidate) {
-                    var id = candidate[0];
-                    var name = candidate[1];
-                    var voteCount = candidate[2];
-
-                    // Render candidate Result
-                    var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-                    candidatesResults.append(candidateTemplate);
+                medChainInstance.patientAddresses(i).then(function(patientAdd) {
+                    medChainInstance.patients[patientAdd].then(function(patient){
+                    var name = patient.name;
 
                     // Render candidate ballot option
-                    var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-                    candidatesSelect.append(candidateOption);
+                    var patientOption = "<option value='" + patientAdd + "' >" + name + "</ option>";
+                    patientSelect.append(patientOption);
+                    });
                 });
             }
-            return medChainInstance.voters(App.account);
-        }).then(function(hasVoted) {
-            // Do not allow a user to vote
-            if(hasVoted) {
-                $('form').hide();
-            }
-            loader.hide();
-            content.show();
+            return medChainInstance.patients(App.account);
         }).catch(function(error) {
             console.warn(error);
         });
@@ -88,7 +76,7 @@ App = {
 
     castVote: function() {
         var candidateId = $('#candidatesSelect').val();
-        App.contracts.medChain.deployed().then(function(instance) {
+        App.contracts.Election.deployed().then(function(instance) {
             return instance.vote(candidateId, { from: App.account });
         }).then(function(result) {
             // Wait for votes to update
@@ -99,8 +87,8 @@ App = {
         });
     },
 
-    listenForEvents: function() {
-        App.contracts.MedChain.deployed().then(function(instance) {
+   /* listenForEvents: function() {
+        App.contracts.Election.deployed().then(function(instance) {
             instance.votedEvent({}, {
                 fromBlock: 0,
                 toBlock: 'latest'
@@ -110,22 +98,11 @@ App = {
                 App.render();
             });
         });
-    },
-
-    initContract: function() {
-        $.getJSON("MedChain.json", function(medChain) {
-            // Instantiate a new truffle contract from the artifact
-            App.contracts.MedChain = TruffleContract(medChain);
-            // Connect provider to interact with contract
-            App.contracts.MedChain.setProvider(App.web3Provider);
-
-            App.listenForEvents();
-
-            return App.render();
-        });
-    }
+    }*/
 };
 
+
+//No need to modify
 $(function() {
     $(window).load(function() {
         App.init();

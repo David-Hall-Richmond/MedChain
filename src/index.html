@@ -13,39 +13,86 @@
 <div class="container" style="width: 650px;">
   <div class="row">
     <div class="col-lg-12">
-      <h1 class="text-center">Election Results</h1>
+      <h1 class="text-center">Provider Portal</h1>
       <hr/>
       <br/>
       <div id="loader">
         <p class="text-center">Loading...</p>
       </div>
       <div id="content" style="display: none;">
+
         <table class="table">
           <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Votes</th>
+              <th>
+                  <button type="button" class="btn btn-primary text-center" data-toggle="modal" data-target="#patientAuthModal">
+                    New Authorization</button>
+              </th>
+
+              <th> <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary text-center">
+                Get Records</button></th>
+              <th> <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary text-center">
+                Add Record</button></th>
           </tr>
           </thead>
           <tbody id="candidatesResults">
           </tbody>
         </table>
 
-        <form onSubmit="App.castVote(); return false;">
+        <form id="mainForm" class="collapse" onSubmit="App.castVote(); return false;">
           <div class="form-group">
-            <label for="candidatesSelect">Select Candidate</label>
+            <label for="candidatesSelect">Select Patient</label>
             <select class="form-control" id="candidatesSelect">
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">Vote</button>
-          <hr />
+          <div id="retrieveButton" class="text-center">
+            <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary">Retrieve</button>
+          </div>
+          <div id="addButton" class="text-center">
+            <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary">Add</button>
+          </div>
+
         </form>
-        <hr/>
         <p id="accountAddress" class="text-center"></p>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="patientAuthModal" tabindex="-1" role="dialog" aria-labelledby="patientAuthModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="patientAuthModalLabel">Add Patient Authorization</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <input type="text" name="patientAddress" value="Enter Patient Address"><br>
+          <input type="text" name="patientPrivateKey" value="Enter Private Key...">
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<a href="#Foo" class="btn btn-default" data-toggle="collapse">Toggle Foo</a>
+<button href="#Bar" class="btn btn-default" data-toggle="collapse">Toggle Bar</button>
+<div id="Foo" class="collapse">
+  This div (Foo) is hidden by default
+</div>
+<div id="Bar" class="collapse in">
+  This div (Bar) is shown by default and can toggle
+-->
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

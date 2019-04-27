@@ -1,41 +1,40 @@
-pragma solidity 0.5.0;
+pragma solidity >=0.4.24 < 0.6.0;
 
 contract MedChain {
 
-    struct Candidate {
-        uint id;
+    //Addresses for sample patients
+    //need to create accounts on MetaMask for these
+    address public address1=0xdCA5F28457838416A67FE0f0fabb7c1eF981926c ;
+    address public address2=0xF00f3032d37b68857250Ad8faaF06bcD115e23a5;
+
+    struct Patient {
+        address patientAddress;
         string name;
-        uint voteCount;
+        string records;
+        mapping(string => bool) authList;
     }
 
-    //candidate list
-    mapping(uint => Candidate) public candidates;
-
-    //voter list
-    mapping(address => bool) public voters;
-    uint public candidatesCount;
+    //Patient list
+    mapping(address => Patient) public patients;
+    uint private patientCount=0;
 
     constructor () public {
-        addCandidate("Candidate 1");
-        addCandidate("Candidate 2");
+        addPatient(address1,"Alice Adams","file1.json");
+        addPatient(address2,"Bob Barkins","file2.json");
     }
 
-    function addCandidate (string memory _name) private {
-        candidatesCount++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name,0);
+    function addPatient (address _address,string memory name,string memory recs) private {
+        patients[_address] = Patient(_address,name,recs);
+
+        //patientAddresses[patientCount] = _address;
+        patientCount++;
     }
 
-    function vote (uint _candidateID) public {
-        require(!voters[msg.sender]);
-        require(_candidateID > 0 && _candidateID <= candidatesCount);
-
-        voters[msg.sender] = true;
-        candidates[_candidateID].voteCount++;
-
-        emit votedEvent(_candidateID);
+    function addAuthorization (address patientAddress, string memory providerHash,uint providerID) public {
+        patients[patientAddress].authList[providerHash] = true;
     }
 
-    event votedEvent (
-         uint indexed _candidateID
-    );
+    function checkAuth(address patientAddress, string memory providerHash) public returns(bool isAuth) {
+        isAuth=patients[patientAddress].authList[providerHash];
+    }
 }
