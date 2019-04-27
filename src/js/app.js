@@ -36,9 +36,6 @@ App = {
         var loader = $("#loader");
         var content = $("#content");
 
-        loader.show();
-        content.hide();
-
         // Load account data
         web3.eth.getCoinbase(function(err, account) {
             if (err === null) {
@@ -73,24 +70,47 @@ App = {
 
                         var patientOption = "<option value='" + patientAdd + "' >" + name + "</ option>";
                         patientSelect.append(patientOption);
+
+
             }
+
+            loader.hide();
+            content.show();
         }).catch(function(error) {
             console.warn(error);
         });
     },
 
-    castVote: function() {
+    getRecords: function() {
         var patientAddress = $('#patientSelect').val();
         App.contracts.medChain.deployed().then(function(instance) {
+            console.log("Getting Authorization: ");
+            console.log(instance.checkAuth(patientAddress, "123456"));
             return instance.auth(patientAddress, { from: App.account });
         }).then(function(result) {
-            // Wait for votes to update
-            $("#content").hide();
-            $("#loader").show();
+            console.log(result);
         }).catch(function(err) {
             console.error(err);
         });
     },
+    /* to be implemented
+    getAuthorization: function(){
+        create hash of private key and nonce
+        get patient address
+        call checkAuth() contract function and return
+    },
+    addRecord: function(){
+        call getAuthorization()
+        open connection to file
+        append new record to file
+        close file
+    },
+    createNewAuthorization(){
+        get patient information from MetaMask
+        create hash
+        send info into addAuthorization() in Contract
+    },
+    */
 
    /* listenForEvents: function() {
         App.contracts.Election.deployed().then(function(instance) {
