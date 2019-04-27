@@ -693,7 +693,7 @@
             "implemented": true,
             "kind": "function",
             "modifiers": [],
-            "name": "addCandidate",
+            "name": "addPandidate",
             "nodeType": "FunctionDefinition",
             "parameters": {
               "id": 33,

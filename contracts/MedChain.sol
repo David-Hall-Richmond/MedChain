@@ -2,40 +2,40 @@ pragma solidity 0.5.0;
 
 contract MedChain {
 
-    struct Candidate {
+    struct Provider {
         uint id;
         string name;
-        uint voteCount;
+        uint authenticateCount;
     }
 
-    //candidate list
-    mapping(uint => Candidate) public candidates;
+    //provider list
+    mapping(uint => Provider) public providers;
 
-    //voter list
-    mapping(address => bool) public voters;
-    uint public candidatesCount;
+    //authenticator list
+    mapping(address => bool) public authenticators;
+    uint public providersCount;
 
     constructor () public {
-        addCandidate("Candidate 1");
-        addCandidate("Candidate 2");
+        addProvider("Provider 1");
+        addProvider("Provider 2");
     }
 
-    function addCandidate (string memory _name) private {
-        candidatesCount++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name,0);
+    function addProvider (string memory _name) private {
+        providersCount++;
+        providers[providersCount] = Provider(providersCount, _name,0);
     }
 
-    function vote (uint _candidateID) public {
-        require(!voters[msg.sender]);
-        require(_candidateID > 0 && _candidateID <= candidatesCount);
+    function authenticate (uint _providerID) public {
+        require(!authenticators[msg.sender]);
+        require(_providerID > 0 && _providerID <= providersCount);
 
-        voters[msg.sender] = true;
-        candidates[_candidateID].voteCount++;
+        authenticators[msg.sender] = true;
+        providers[_providerID].authenticateCount++;
 
-        emit votedEvent(_candidateID);
+        emit authenticatedEvent(_providerID);
     }
 
-    event votedEvent (
-         uint indexed _candidateID
+    event authenticatedEvent (
+         uint indexed _providerID
     );
 }

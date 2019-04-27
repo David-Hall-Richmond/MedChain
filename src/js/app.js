@@ -50,27 +50,27 @@ App = {
         // Load contract data
         App.contracts.MedChain.deployed().then(function(instance) {
             medChainInstance = instance;
-            return medChainInstance.candidatesCount();
-        }).then(function(candidatesCount) {
-            var candidatesResults = $("#candidatesResults");
-            candidatesResults.empty();
+            return medChainInstance.providersCount();
+        }).then(function(providersCount) {
+            var providersResults = $("#providersResults");
+            providersResults.empty();
 
-            var candidatesSelect = $('#candidatesSelect');
-            candidatesSelect.empty();
+            var providersSelect = $('#providersSelect');
+            providersSelect.empty();
 
-            for (var i = 1; i <= candidatesCount; i++) {
-                medChainInstance.candidates(i).then(function(candidate) {
-                    var id = candidate[0];
-                    var name = candidate[1];
-                    var voteCount = candidate[2];
+            for (var i = 1; i <= providersCount; i++) {
+                medChainInstance.providers(i).then(function(provider) {
+                    var id = provider[0];
+                    var name = provider[1];
+                    var voteCount = provider[2];
 
-                    // Render candidate Result
-                    var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-                    candidatesResults.append(candidateTemplate);
+                    // Render provider Result
+                    var providerTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
+                    providersResults.append(providerTemplate);
 
-                    // Render candidate ballot option
-                    var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-                    candidatesSelect.append(candidateOption);
+                    // Render provider ballot option
+                    var providerOption = "<option value='" + id + "' >" + name + "</ option>"
+                    providersSelect.append(providerOption);
                 });
             }
             return medChainInstance.voters(App.account);
@@ -87,9 +87,9 @@ App = {
     },
 
     castVote: function() {
-        var candidateId = $('#candidatesSelect').val();
+        var providerId = $('#providersSelect').val();
         App.contracts.medChain.deployed().then(function(instance) {
-            return instance.vote(candidateId, { from: App.account });
+            return instance.vote(providerId, { from: App.account });
         }).then(function(result) {
             // Wait for votes to update
             $("#content").hide();
