@@ -25,13 +25,16 @@
           <thead>
           <tr>
               <th>
-                  <button type="button" class="btn btn-primary text-center" data-toggle="modal" data-target="#patientAuthModal">
+                  <button type="button" class="btn btn-primary text-center" data-toggle="modal" data-target="#patientAuthModal"
+                    onclick="App.patientRecords.hide()">
                     New Authorization</button>
               </th>
 
-              <th> <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary text-center">
+              <th> <button data-toggle="collapse" data-target="#mainForm" type="button" class="btn btn-primary text-center"
+                onclick="App.loadGetRecords()">
                 Get Records</button></th>
-              <th> <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary text-center">
+              <th> <button data-toggle="collapse" data-target="#mainForm" type="button" class="btn btn-primary text-center"
+                onclick="App.loadAddRecords()">
                 Add Record</button></th>
           </tr>
           </thead>
@@ -39,21 +42,26 @@
           </tbody>
         </table>
 
-        <form id="mainForm" class="collapse" onSubmit="App.getRecords();return false">
+        <form id="mainForm" class="collapse" >
           <div class="form-group">
             <label for="patientSelect">Select Patient</label>
             <select class="form-control" id="patientSelect">
             </select>
           </div>
           <div id="retrieveButton" class="text-center">
-            <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary">Retrieve</button>
+            <button data-toggle="collapse" data-target="#mainForm" type="button" class="btn btn-primary" onclick="App.getRecordsHandler()">
+              Retrieve</button>
           </div>
           <div id="addButton" class="text-center">
-            <button data-toggle="collapse" data-target="#mainForm" type="submit" class="btn btn-primary">Add</button>
+            <input type="file" style="display: none" />
+            <button data-toggle="collapse" data-target="#mainForm" type="button" class="btn btn-primary" onclick="App.addRecordHandler()">Add</button>
           </div>
-
         </form>
         <p id="accountAddress" class="text-center"></p>
+        <div class="boxed">
+          <pre id="patientRecords" ></pre>
+        </div>
+
       </div>
     </div>
   </div>
@@ -64,21 +72,17 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="patientAuthModalLabel">Add Patient Authorization</h5>
+        <h5 class="modal-title" id="patientAuthModalLabel">Confirm Authorization</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form>
-          <input type="text" name="patientAddress" value="Enter Patient Address"><br>
-          <input type="text" name="patientPrivateKey" value="Enter Private Key...">
-
-        </form>
+        Please click 'OK' to confirm authorization
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="App.newAuthHandler()">OK</button>
       </div>
     </div>
   </div>
