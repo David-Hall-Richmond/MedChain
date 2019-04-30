@@ -7,6 +7,7 @@ contract MedChain {
     address public address1=0xdCA5F28457838416A67FE0f0fabb7c1eF981926c;
     address public address2=0xF00f3032d37b68857250Ad8faaF06bcD115e23a5;
 
+
     struct Patient {
         address patientAddress;
         string name;
